@@ -36,33 +36,29 @@ app.get('/api/hello', function(req, res) {
 
 let id= 0;
 app.post('/api/shorturl', function(req, res) {
-  dns.lookup(req.body.url, (err, address) => {
-    if (!req.body.url.startsWith('https://www.')){
-      res.json({ error: "invalid url"});
+  if (!req.body.url.startsWith('https://www.')){
+    res.json({ error: "invalid url"});
+  }
+  shortUrl.find({ url: req.body.url }, (err, data) => {
+    if (err) {
+      res.json({ error: err });
     }
-    if (address) {
-      shortUrl.find({ url: req.body.url }, (err, data) => {
+    if (!data.length) {
+      const short = new shortUrl({ url: req.body.url, short_url: id });
+      id++;
+      short.save((err, data) => {
         if (err) {
-          res.json({ error: err });
-        }
-        if (!data.length) {
-          const short = new shortUrl({ url: req.body.url, short_url: id });
-          id++;
-          short.save((err, data) => {
-            if (err) {
-              res.json({error: err });
-            } else {
-              console.log('new')
-              console.log(data);
-              res.json({original_url: req.body.url, short_url: data.short_url});
-            };
-          });
+          res.json({error: err });
         } else {
-          console.log('not new')
+          console.log('new')
           console.log(data);
-          res.json({original_url: req.body.url, short_url: data[0].short_url});
+          res.json({original_url: req.body.url, short_url: data.short_url});
         };
-      })
+      });
+    } else {
+      console.log('not new')
+      console.log(data);
+      res.json({original_url: req.body.url, short_url: data[0].short_url});
     };
   });
 })
