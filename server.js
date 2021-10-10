@@ -37,7 +37,7 @@ app.get('/api/hello', function(req, res) {
 let id= 0;
 app.post('/api/shorturl', function(req, res) {
   console.log(req.body);
-  if (!req.body.url.startsWith('https://www.')){
+  if (!req.body.url.startsWith('https://')){
     console.log({ error: "invalid url"})
     res.json({ error: "invalid url"});
   } else {
