@@ -38,10 +38,12 @@ let id= 0;
 app.post('/api/shorturl', function(req, res) {
   console.log(req.body);
   if (!req.body.url.startsWith('https://www.')){
+    console.log({ error: "invalid url"})
     res.json({ error: "invalid url"});
   } else {
     shortUrl.find({ url: req.body.url }, (err, data) => {
       if (err) {
+        console.log({ error: err })
         res.json({ error: err });
       }
       if (!data.length) {
@@ -49,16 +51,19 @@ app.post('/api/shorturl', function(req, res) {
         id++;
         short.save((err, data) => {
           if (err) {
+            console.log({ error: err })
             res.json({error: err });
           } else {
             console.log('new')
             console.log(data);
+            console.log({original_url: req.body.url, short_url: data.short_url})
             res.json({original_url: req.body.url, short_url: data.short_url});
           };
         });
       } else {
         console.log('not new')
         console.log(data);
+        console.log({original_url: req.body.url, short_url: data[0].short_url})
         res.json({original_url: req.body.url, short_url: data[0].short_url});
       };
     });
