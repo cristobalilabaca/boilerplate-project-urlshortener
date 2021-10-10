@@ -37,9 +37,8 @@ app.get('/api/hello', function(req, res) {
 let id= 0;
 app.post('/api/shorturl', function(req, res) {
   dns.lookup(req.body.url, (err, address) => {
-    if (err) {
-      console.log(err);
-      res.json({ error: 'invalid url'});
+    if (!req.body.url.startsWith('https://www.')){
+      res.json({ error: "invalid url"});
     }
     if (address) {
       shortUrl.find({ url: req.body.url }, (err, data) => {
