@@ -64,7 +64,7 @@ app.post('/api/shorturl', function(req, res) {
 })
 
 app.get('/api/shorturl/:url', function(req, res) {
-  shortUrl.findById(req.params.url, (err, data) => {
+  shortUrl.find({short_url: req.params.url}, (err, data) => {
     if (err) {
       res.json({ error: err});
     } else {
