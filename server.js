@@ -43,10 +43,14 @@ app.post('/api/shorturl', function(req, res) {
         if (err) {
           res.json({error: err });
         } else {
+          console.log('not new')
+          console.log(data);
           res.json({original_url: req.body.url, short_url: data._id});
         };
       });
     } else {
+      console.log('new')
+      console.log(data);
       res.json({original_url: req.body.url, short_url: data._id});
     };
   })
