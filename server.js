@@ -72,10 +72,11 @@ app.post('/api/shorturl', function(req, res) {
 
 app.get('/api/shorturl/:url', function(req, res) {
   shortUrl.find({short_url: req.params.url}, (err, data) => {
+    console.log(data[0])
     if (err) {
       res.json({ error: err});
     } else {
-      res.redirect(data.url);
+      res.redirect(data[0].url);
     }
   })
 })
