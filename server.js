@@ -32,7 +32,11 @@ app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
 });
 
+
+let id= 0;
 app.post('/api/shorturl', function(req, res) {
+  console.log(id)
+  id++;
   shortUrl.find({ url: req.body.url }, (err, data) => {
     if (err) {
       res.json({ error: err });
