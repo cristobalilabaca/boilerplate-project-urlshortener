@@ -9,7 +9,8 @@ const bodyParser = require('body-parser');
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const shortUrlSchema = new mongoose.Schema({
-  url: { type: String, required: true}
+  url: { type: String, required: true},
+  short_url: Number,
 })
 
 const shortUrl = mongoose.model('shortUrl', shortUrlSchema);
@@ -35,27 +36,26 @@ app.get('/api/hello', function(req, res) {
 
 let id= 0;
 app.post('/api/shorturl', function(req, res) {
-  console.log(id)
-  id++;
   shortUrl.find({ url: req.body.url }, (err, data) => {
     if (err) {
       res.json({ error: err });
     }
     if (!data.length) {
-      const short = new shortUrl({ url: req.body.url });
+      const short = new shortUrl({ url: req.body.url, short_url: id });
+      id++;
       short.save((err, data) => {
         if (err) {
           res.json({error: err });
         } else {
           console.log('new')
           console.log(data);
-          res.json({original_url: req.body.url, short_url: data._id});
+          res.json({original_url: req.body.url, short_url: data.short_url});
         };
       });
     } else {
       console.log('not new')
       console.log(data._id);
-      res.json({original_url: req.body.url, short_url: data._id});
+      res.json({original_url: req.body.url, short_url: data.short_url});
     };
   })
 })
