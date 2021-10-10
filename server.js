@@ -50,7 +50,7 @@ app.post('/api/shorturl', function(req, res) {
       });
     } else {
       console.log('not new')
-      console.log(data);
+      console.log(data._id);
       res.json({original_url: req.body.url, short_url: data._id});
     };
   })
